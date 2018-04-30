@@ -2,6 +2,21 @@
 
 ## Part 1
 
+__You are given two subroutines written in x86 assembly. Your task is to reverse engineer both of them to figure out what they are trying to accomplish. The main goal for each of them is listed as a comment in both files. Your submission should include a qualitative description of what subroutines are doing. Depending on how you came across your answers, please provide any supporting materials that show your understanding of the code snippets.
+
+
+So in order to start running this program I made ```_start``` global so that it is visible to the linker, and within my ```_start``` label I call ```do_this```, I then assemble the files using this command ```yasm -g dwarf2 -felf32 re1.x```, I use ```-g dwarf2``` to enable debugging. I then assembled the files using ```ld -m elf_i386 re1.o -o re1.x``` to turn the file into an executables. These executables I ran with gdb to find out what exactly they were doing.
+
+
+![alt text]()
+
+
+Using the ```info registers``` command I was able to see the value of each or all of the registers.
+
+![alt text]()
+
+
+I did the same process for both ```re1.s``` and ```re2.s``` and these are the results of my snoopings
 
 
 The code in ```re1.s```:
@@ -43,7 +58,7 @@ _start:
 ```
 
 
-This code returns the value: ```67616c66h```
+The code above returns the value: ```67616c66h```
 
 
 The code in ```re2.s```:
@@ -78,7 +93,7 @@ section .data         ;where data x is stored
 x dd 0
 ```
 
-This code returns the value: ```33383952h```
+This code above returns the value: ```33383952h```
 
 
 
@@ -87,68 +102,13 @@ This code returns the value: ```33383952h```
 
 ## Part 2
 
+__Write a function in x86 assembly 32-bit mode with the label tribonacci that computes the Tribonacci sequence. The sequence is defined as:
 
-```
-section .text
-	global _start
-
-section .text
-
-_start:
-
-		push eax
-		mov eax, 0		
-		call tribonacci
-		
-		
-		
-
-tribonacci:	       
-		      push ebp			      ;saves old frame pointer
-	        mov ebp, esp	      ;sets new frame pointer
-	     
-		      mov ecx, [ebp+8]		;retrieving parameter
-	     
-		      cmp ecx, 0			    ;if parameter is 0
-		      jle return			    ;moves to end of program
-
-		      cmp ecx, 1			    ;if parameter is 1
-		      je basecase	
-	      
-		      cmp ecx, 2			    ;if parameter is 2
-		      je basecase
-
-		      mov edx, 1
-		      sub ecx, edx			  ;n - 1
-	       	push ecx			      ;passes in parameter n - 1
-	       	call tribonacci			;makes recursive call
-	       	pop ecx				      ;retrieves parameter
+__T(0) = 0
+T(1) = 1
+T(2) = 1
+T(n) = T(n-1) + T(n-2) + T(n-3)
 
 
-	       	mov edx, 1	
-	       	sub ecx, edx			  ;n - 2
-	       	push ecx 			      ;passes in parameter n - 2
-	       					
-	       	call tribonacci			;makes recursive call
-		      pop ecx				
+My code is adapted from some code from my CMSC216 class, I simply added another recursive call with parameter n-2, the code can be found [here]()
 
-	       	mov edx, 1
-		      sub ecx, edx			  ;n - 3
-	       	push ecx			      ;passes in parameter n - 3
-
-	      	call tribonacci			;makes recursive call
-		      pop ecx
-
-	       	jmp return			    ;moves to end of program
-
-	       
-
-basecase:     
-          mov edx, 1		
-	       	add eax, edx			    ;adds 1 to return value
-	       
-return:        
-          mov esp, ebp			    ;reset stack pointer
-	       	pop ebp    			      ;restore old frame pointer
-	       	ret
-```
