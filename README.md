@@ -42,6 +42,10 @@ _start:
   do_this
 ```
 
+
+This code returns the value: ```67616c66h```
+
+
 The code in ```re2.s```:
 
 ```
@@ -70,9 +74,13 @@ do_this:
   pop ebp             ;returns the base pointer back to its previous address
   ret                 ;return call, returns the value at eax
 
-section .data
+section .data         ;where data x is stored
 x dd 0
 ```
+
+This code returns the value: ```33383952h```
+
+
 
 
 
