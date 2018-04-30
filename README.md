@@ -3,7 +3,14 @@
 ## Part 1
 
 
+
+The code in ```re1.s```:
 ```
+
+section .text
+
+global _start
+
 section .text
 do_this:
   push ebp          ;pushes the base pointer to the stack so that it can be returned to later
@@ -29,6 +36,45 @@ f:
   mov esp, ebp      ;moving the position of the stack pointer back to the base pointer
   pop ebp           ;poping the previous location of the base pointer
   ret               ;return call
+  
+_start:
+
+  do_this
 ```
+
+The code in ```re2.s```:
+
+```
+; what does this return?
+section .text
+do_this:
+  push ebp            ;pushes the base pointer to the stack so that it can be returned to later
+  mov ebp, esp        ;set the base pointer to the same location of the stack pointer, effectively creating a new frame
+  push edi            ;pushes the value at edi onto stack
+
+  mov al, 33h         ;sets the value of the lower part of the register ax with the binary value 0011 0011
+  mov cl, 4           ;sets the value of the lower part of the register cx with the value 4
+  lea edi, [x]        ;loads the address of x into register edi
+
+  rep stosb           ;repeats the instruction until ecx is zero, which happend 4 times, each time moving the value at al (33h) into x
+
+  xor BYTE [x], 0     ;xors the value at [x] with 0 = 33h
+  xor BYTE [x+1], 0bh ;xors the value ot [x+1] with 0bh = 38h
+  xor BYTE [x+2], 0ah ;xors the value at [x+2] with 0ah = 39h
+  xor BYTE [x+3], 61h ;xors the value at [x+3] with 61h = 52h
+
+  mov eax, [x]        ;sets the value of eax with the value at x which is now 33383952h
+
+  pop edi             
+  mov esp, ebp        ;returns the stack pointer to the address of the base pointer
+  pop ebp             ;returns the base pointer back to its previous address
+  ret                 ;return call, returns the value at eax
+
+section .data
+x dd 0
+```
+
+
+
 
 ## Part 2
