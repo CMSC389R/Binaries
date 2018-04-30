@@ -2,22 +2,23 @@
 
 ## Part 1
 
-__You are given two subroutines written in x86 assembly. Your task is to reverse engineer both of them to figure out what they are trying to accomplish. The main goal for each of them is listed as a comment in both files. Your submission should include a qualitative description of what subroutines are doing. Depending on how you came across your answers, please provide any supporting materials that show your understanding of the code snippets.
+__You are given two subroutines written in x86 assembly. Your task is to reverse engineer both of them to figure out what they are trying to accomplish. The main goal for each of them is listed as a comment in both files. Your submission should include a qualitative description of what subroutines are doing. Depending on how you came across your answers, please provide any supporting materials that show your understanding of the code snippets.__
 
 
 So in order to start running this program I made ```_start``` global so that it is visible to the linker, and within my ```_start``` label I call ```do_this```, I then assemble the files using this command ```yasm -g dwarf2 -felf32 re1.x```, I use ```-g dwarf2``` to enable debugging. I then assembled the files using ```ld -m elf_i386 re1.o -o re1.x``` to turn the file into an executables. These executables I ran with gdb to find out what exactly they were doing.
 
 
-![alt text]()
+![alt text](https://github.com/yreiss1/Binaries/blob/master/Screen%20Shot%202018-04-29%20at%209.22.08%20PM.png)
 
 
 Using the ```info registers``` command I was able to see the value of each or all of the registers.
 
-![alt text]()
+![alt text](https://github.com/yreiss1/Binaries/blob/master/Screen%20Shot%202018-04-29%20at%209.23.45%20PM.png)
 
 
 I did the same process for both ```re1.s``` and ```re2.s``` and these are the results of my snoopings
 
+![alt text](https://github.com/yreiss1/Binaries/blob/master/Screen%20Shot%202018-04-29%20at%209.39.16%20PM.png)
 
 The code in ```re1.s```:
 ```
@@ -107,8 +108,8 @@ __Write a function in x86 assembly 32-bit mode with the label tribonacci that co
 __T(0) = 0
 T(1) = 1
 T(2) = 1
-T(n) = T(n-1) + T(n-2) + T(n-3)
+T(n) = T(n-1) + T(n-2) + T(n-3)__
 
 
-My code is adapted from some code from my CMSC216 class, I simply added another recursive call with parameter n-2, the code can be found [here]()
+My code is adapted from some code from my CMSC216 class, I simply added another recursive call with parameter n-2, the code can be found [here](https://github.com/yreiss1/Binaries/blob/master/tribonacci.s)
 
